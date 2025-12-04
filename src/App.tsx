@@ -394,11 +394,11 @@ function App() {
               {/* Price */}
               <div className="flex items-baseline gap-3">
                 <span className="text-2xl sm:text-4xl font-bold text-[#4A3540]">${selectedBundle.price}</span>
-                {selectedBundle.savings > 0 && (
+                {selectedBundle.savings && (
                   <>
-                    <span className="text-xl text-[#4A3540]/40 line-through">${(19.99 * parseInt(selectedBundle.name)).toFixed(2)}</span>
+                    <span className="text-xl text-[#4A3540]/40 line-through">${(19.99 * selectedBundle.quantity).toFixed(2)}</span>
                     <span className="bg-[#B8D4E8] text-[#4A3540] px-2 py-0.5 rounded-full text-sm font-semibold">
-                      SAVE ${selectedBundle.savings}
+                      {selectedBundle.savings}
                     </span>
                   </>
                 )}
