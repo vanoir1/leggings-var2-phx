@@ -143,7 +143,7 @@ const COLORS = [
   { name: 'Pink', hex: '#ec4899', class: 'bg-[#ec4899]' }
 ]
 
-const SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL']
+const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
 
 const BUNDLES = [
   {
@@ -225,8 +225,17 @@ const SIZE_GUIDE_DATA = [
   { size: 'M', dress: '8-10', waist: '28-30"', hip: '38-40"' },
   { size: 'L', dress: '12-14', waist: '30-32"', hip: '40-42"' },
   { size: 'XL', dress: '16-18', waist: '32-34"', hip: '42-44"' },
-  { size: '2XL', dress: '20-22', waist: '34-36"', hip: '44-46"' },
+  { size: 'XXL', dress: '20-22', waist: '34-36"', hip: '44-46"' },
 ]
+
+// Available sizes per color (from Shopify inventory)
+const AVAILABLE_SIZES_BY_COLOR: Record<string, string[]> = {
+  'Black': ['XS', 'M', 'XL', 'XXL'],
+  'Navy': ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+  'Gray': ['XS', 'L', 'XL', 'XXL'],
+  'Yellow': ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+  'Pink': ['XS', 'S', 'XL', 'XXL'],
+}
 
 const FEATURE_CARDS = [
   { image: '/features/flat-tummy.webp', title: 'Tummy Control', desc: 'High-waist compression for a smooth, flattering silhouette' },
@@ -239,6 +248,16 @@ function App() {
   const [selectedColor, setSelectedColor] = useState(COLORS[0])
   const [selectedSize, setSelectedSize] = useState('M')
   const [selectedBundle, setSelectedBundle] = useState(BUNDLES[1])
+
+  // Get available sizes for current color
+  const availableSizes = AVAILABLE_SIZES_BY_COLOR[selectedColor.name] || SIZES
+
+  // Auto-select valid size when color changes
+  useEffect(() => {
+    if (!availableSizes.includes(selectedSize)) {
+      setSelectedSize(availableSizes[0])
+    }
+  }, [selectedColor, availableSizes, selectedSize])
   const [currentImage, setCurrentImage] = useState(0)
   const [touchStart, setTouchStart] = useState<number | null>(null)
   const [touchEnd, setTouchEnd] = useState<number | null>(null)
@@ -435,7 +454,7 @@ function App() {
                   </button>
                 </div>
                 <div className="grid grid-cols-6 gap-2">
-                  {SIZES.map((size) => (
+                  {availableSizes.map((size) => (
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
